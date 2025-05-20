@@ -2,18 +2,15 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\usercontroller;
 
-Route::get('/user', function() {
-    return 'user list';
-});
+Route::get('/user', [usercontroller::class, 'index']);
 
 Route::get('/user/{id}', function() {
     return 'only one user';
 });
 
-Route::post('/user', function() {
-    return 'creando usuario';
-});
+Route::post('/user', [usercontroller::class, 'store']);
 
 Route::put('/user/{id}', function() {
     return 'actualizando usuario';
