@@ -60,4 +60,78 @@ class usercontroller extends Controller
             ];
             return response()->json($data, 201);
     }
+    public function show($id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            $data =[
+                'mesaje' => 'usuario no encontrado',
+                'status' => 404
+            ];
+            return response()->json($data, 404);
+        }
+        $data = [
+            'mesaje' => 'usuario encontrado',
+            'data' => $user,
+            'status' => 200
+        ];
+        return response()->json($data, 200);
+    }
+
+    public function destroy($id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            $data =[
+                'mesaje' => 'usuario no encontrado',
+                'status' => 404
+            ];
+            return response()->json($data, 404);
+        }
+        $user->delete();
+        $data = [
+            'mesaje' => 'usuario eliminado con exito',
+            'status' => 200
+        ];
+        return response()->json($data, 200);
+    }
+
+    public function update(Request $request, $id)
+    {
+        $user = User::find($id);
+        if (!$user) {
+            $data =[
+                'mesaje' => 'usuario no encontrado',
+                'status' => 404
+            ];
+            return response()->json($data, 404);
+        }
+        $validar = Validator::make($request->all(), [
+            'name' => 'required|string|max:20',
+            'email' => 'required|string|email|max:100|unique:users,email,'.$user->id,
+            'password' => 'required|string|min:8',
+            'phone' => 'required|string|max:15',
+        ]);
+        if($validar->fails()){
+            $data =[
+                'mesaje' => 'error en la validacion de datos',
+                'data' => $validar->errors(),
+                'status' => 400
+            ];
+            return response()->json($data,200);
+        }
+
+        $user->name = $request->name;
+        $user->email = $request->email;
+        $user->password = bcrypt($request->password);
+        $user->phone = $request->phone;
+        $user->save();
+        $data = [
+            'mesaje' => 'usuario actualizado con exito',
+            'data' => $user,
+            'status' => 200
+        ];
+        return response()->json($data, 200);
+
+    }
 }

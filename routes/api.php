@@ -4,18 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\usercontroller;
 
-Route::get('/user', [usercontroller::class, 'index']);
+Route::get('/user', [Usercontroller::class, 'index']);
 
-Route::get('/user/{id}', function() {
-    return 'only one user';
-});
+Route::get('/user/{id}',[Usercontroller::class, 'show']);
 
-Route::post('/user', [usercontroller::class, 'store']);
+Route::post('/user', [Usercontroller::class, 'store']);
 
-Route::put('/user/{id}', function() {
-    return 'actualizando usuario';
-});
+Route::put('/user/{id}', [Usercontroller::class, 'update']);
 
-Route::delete('/user/{id}', function() {
-    return 'eliminando usuario';
-});
+Route::delete('/user/{id}', [Usercontroller::class, 'destroy']);
